@@ -337,7 +337,7 @@
  }
 
    window.onload = (function(){
-		 
+
 		app._registerServiceWorker();
 
 		/* interval to check if user has internet access */
@@ -352,5 +352,9 @@
 		})();
 	})();
 })();
+
+/* #2e2e6e */
+/* #013f73 */
+/* #a70d0d */
 
 
