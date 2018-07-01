@@ -13,7 +13,7 @@ self.addEventListener('install', (e) => {
 				'/index.html',
 				'/assets/scripts/app.js',
 				'/assets/styles/style.css',
-				'/assets/images/caret-down.png',
+				'/assets/styles/imgs/caret-down.png',
 				'/assets/images/money.png',
 				'/assets/icons/icons.css',
 				'/assets/icons/fonts/icons.eot',
