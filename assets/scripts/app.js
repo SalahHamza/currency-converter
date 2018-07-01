@@ -11,9 +11,10 @@
 
 
 
-   /*******************
-         Utilities
-   ********************/
+	/******************************
+	 * 				Utilities
+	******************************/
+	/* turns object into an iterable */
 	function* iterObj(obj = {}) {
 		for (let prop of Object.keys(obj)){
 			if(obj.hasOwnProperty(prop)){
@@ -21,12 +22,19 @@
 			}
 		}
 	}
-
-	app.isEqual = (id1, id2) => {
-		const [fr, to] = id2;
-		return id1.includes(fr) && id1.includes(to);
-	}
-
+	/* structures fetched data*/
+	app.structureData = (data, fr, to) => ({
+		id: `${fr}_${to}`,
+		date: new Date(),
+		fr: fr,
+		to: to,
+		dc: data[`${fr}_${to}`]['val'],
+		rc: data[`${to}_${fr}`]['val']
+  });
+	/******************************
+	 * 				Events
+	******************************/
+	/* Adds close/delete event to the conversion card */
 	app.addCloseEvent = (card, id) => {
 		if(!card){
 			card = document;
@@ -41,15 +49,10 @@
 		});
 	}
 
-	app.structureData = (data, fr, to) => ({
-		id: `${fr}_${to}`,
-		date: new Date(),
-		fr: fr,
-		to: to,
-		dc: data[`${fr}_${to}`]['val'],
-		rc: data[`${to}_${fr}`]['val']
-  });
-
+	/******************************
+	 * 	UI maintainers controle
+	******************************/
+	/* Sets card values/content */
 	app.setCardElems = (card, data, amount) => {
 		card.querySelector('.fromResultAmount').value = amount.toFixed(3);
 		card.querySelector('.fromResultName').textContent = data.fr;
@@ -64,14 +67,12 @@
 	/* Clones the conversion card 
 		template and sets data into it. */
 	app.updateCoversionCard = (data, amount) => {
-
 		let card = app.visibleCards[data.id];
 		if(!card){
 			card = app.cardTemplate.cloneNode(true);
 			card.classList.remove('cardTemplate');
 			app.visibleCards[data.id] = card;
 		}
-
 		card.setAttribute('id', data.id);
 		app.setCardElems(card, data, amount);
 		// add close event listener to close/delete
@@ -83,18 +84,9 @@
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 		}
 	}
+	
 
-	/* get conversion data and updates card conversion  */
-  app.getConversionData = (fr, to, amount) => {
-    const query = `${fr}_${to},${to}_${fr}`;
-		const url   = `https://free.currencyconverterapi.com/api/v5/convert?q=${query}`;
-		const path = '/assets/scripts/countries.json';
-    return fetch(url).then(res => {
-			if(!res || res.status !== 200) throw new Error('No network response');
-			return res.json();
-		})
-	}
-
+	/* gets conversion data and updates card */
 	app.getConversion  = (fr, to, amount) => {
 		app.getConversionData(fr, to, amount).then( data => {
 			const structuredData = app.structureData(data.results, fr, to);
@@ -105,10 +97,30 @@
 		});
 	}
 
-	/********************************
-	 *				WORKING!!!!!!!!!!!! 
-	 *********************************/
-	
+	/* add one currency to the select tags */
+	app.addCurrencyOption = ({id}) => {
+		const slctd1 = id === 'USD' ? 'selected' : '';
+		const slctd2 = id === 'EUR' ? 'selected' : '';
+		app.selectFromElem
+		.innerHTML +=  `<option value="${id}" ${slctd1}>${id}</option>`;
+		app.selectToElem.
+		innerHTML += `<option value="${id}" ${slctd2}>${id}</option>`;
+	}
+
+	/******************************
+	 * 		network data getters
+	******************************/
+	/* get conversion data  */
+	app.getConversionData = (fr, to, amount) => {
+		const query = `${fr}_${to},${to}_${fr}`;
+		const url   = `https://free.currencyconverterapi.com/api/v5/convert?q=${query}`;
+		const path = '/assets/scripts/countries.json';
+			return fetch(url).then(res => {
+			if(!res || res.status !== 200) throw new Error('No network response');
+			return res.json();
+		});
+	}
+
 	/* fetchs currencies from API and sets it to the DB */
 	app.fetchCurrencyData = (db) => {
 		const url = 'https://free.currencyconverterapi.com/api/v5/currencies?';
@@ -134,35 +146,10 @@
 		});
 	}
 
-	/* add one currency to the select tags */
-	app.addCurrencyOption = ({id}) => {
-		const slctd1 = id === 'USD' ? 'selected' : '';
-		const slctd2 = id === 'EUR' ? 'selected' : '';
-		app.selectFromElem
-		.innerHTML +=  `<option value="${id}" ${slctd1}>${id}</option>`;
-		app.selectToElem.
-		innerHTML += `<option value="${id}" ${slctd2}>${id}</option>`;
-	}
-
-
-  app.saveAddedConversions = () => {
-    app.idbPromise.then((db) => {
-      if(!db) return;
-      const tx = db.transaction('conversions', 'readwrite');
-      const conversionsStore = tx.objectStore('conversions');
-      for(let conversion of app.addedConversions){
-        conversionsStore.put(conversion);
-      }
-      return tx.complete;
-    }).then(() => {
-      console.log('Conversions added');
-    });
-  }
-
 	
 
 	/***********************************************
-	 					 Main Code Flow
+	 					 			IDB controllers
 	***********************************************/
 
 	/* opening DB */
@@ -176,13 +163,14 @@
 			'conversions',
 			{ keyPath: 'id' }
 		);
+		
 	});
 
 	/*  getting the currencies for the select options*/
 	app.idbPromise.then( db => {
 		if(!db) return;
 		const tx = db.transaction('currencies');
-		let store = tx.objectStore('currencies');
+		const store = tx.objectStore('currencies');
 		return store.getAll().then(currencies => {
 			if(!currencies.length){
 				app.fetchCurrencyData(db);
@@ -203,7 +191,7 @@
   app.idbPromise.then((db) => {
     if(!db) return;
     const tx = db.transaction('conversions');
-    const conversionsStore = tx.objectStore('conversions');
+		const conversionsStore = tx.objectStore('conversions');
     return conversionsStore.getAll();
   }).then((conversions) => {
     if(!conversions.length) return;
@@ -215,8 +203,22 @@
 				conversion.amount
 			);
     }
-    
-  });
+	});
+	
+	/* adds conversion to IDB  */
+  app.saveAddedConversions = () => {
+    app.idbPromise.then((db) => {
+      if(!db) return;
+      const tx = db.transaction('conversions', 'readwrite');
+      const conversionsStore = tx.objectStore('conversions');
+      for(let conversion of app.addedConversions){
+        conversionsStore.put(conversion);
+      }
+      return tx.complete;
+    }).then(() => {
+      console.log('Conversions added');
+    });
+  }
 
 	/************************************/
 	/* EVENT LISTENERS ON CONVERT CARD */
@@ -235,6 +237,7 @@
 		app.getConversion(fr, to, amount);
 	});
 
+	/* adds convert to conversion card (for offline use) */
 	app.addConverionEvent = (card) => {
 		card.querySelector('.fromResultName.button').addEventListener('click', function(){
 			const card = this.parentNode.parentNode;
@@ -255,7 +258,7 @@
 		});
 	}
 
-	/* SWAP from and to currencies */
+	/* SWAPs from and to currencies */
 	document.querySelector('.button.exchange').addEventListener('click', function(){
 		/* select containers */
 		const frContainer = document.querySelector('.fromCurrency');
@@ -290,22 +293,9 @@
 		app.selectToElem = frElem;
 	});
 
-	
-   app.seedData = {
-      USD_EUR: {
-         id: "USD_EUR",
-         val: 53.360001,
-         to: "EUR",
-         fr: "USD"
-      },
-      EUR_USD: {
-         id: "EUR_USD",
-         val: 0.018741,
-         to: "USD",
-         fr: "EUR"
-      }
-	}
-
+	/************************************/
+	/* 		SERVICE WORKER REGISTRATIO 		*/
+	/***********************************/
 	/* Registers service workers */
 	app._registerServiceWorker = () => {
 		if(!navigator.serviceWorker) return;
@@ -320,16 +310,7 @@
 
    window.onload = (function(){
 		app._registerServiceWorker();
-		// const data = app.structureData(app.seedData, 'USD', 'EUR');
-		// app.updateCoversionCard(data, 300.65);
-
-
 	})();
-	
-
-
-
-
 })();
 
 

@@ -50,7 +50,7 @@ self.addEventListener('activate', function(e) {
 
 
 self.addEventListener('fetch', function(e) {
-  var dataUrl = 'https://free.currencyconverterapi.com/api/v5/';
+  var dataUrl = 'https://free.currencyconverterapi.com/api/v5/convert?';
   if (e.request.url.includes(dataUrl)) {
     e.respondWith(
 			fetch(e.request).then( (res) => {
