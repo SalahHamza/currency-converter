@@ -112,8 +112,7 @@
 	/* fetchs currencies from API and sets it to the DB */
 	app.fetchCurrencyData = (db) => {
 		const url = 'http://free.currencyconverterapi.com/api/v5/currencies?';
-		const path = '/assets/scripts/currencies.json';
-		fetch(path).then(res => {
+		fetch(url).then(res => {
 			if(!res || res.status !== 200){
 				return Promise.resolve();
 			}

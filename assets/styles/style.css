@@ -193,7 +193,7 @@ select {
 .converter .fromCurrency select {
 	flex-grow: 1;
 	padding: 8px 16px;
-	background: url(/assets/images/caret-down.png)
+	background: url(./imgs/caret-down.png)
 							96% / 15% no-repeat;
 	background-size: 12px;
   -webkit-appearance: none;
