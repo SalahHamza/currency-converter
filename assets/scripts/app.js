@@ -6,7 +6,8 @@
 		selectFromElem: document.querySelector('.fromCurrency select'),
 		selectToElem: document.querySelector('.toCurrency select'),
 		visibleCards: {},
-		addedConversions: []
+		addedConversions: [],
+		showMessage: false
   }
 
 
@@ -31,23 +32,6 @@
 		dc: data[`${fr}_${to}`]['val'],
 		rc: data[`${to}_${fr}`]['val']
   });
-	/******************************
-	 * 				Events
-	******************************/
-	/* Adds close/delete event to the conversion card */
-	app.addCloseEvent = (card, id) => {
-		if(!card){
-			card = document;
-		}
-		card.querySelector('.close').addEventListener('click', function(){
-			this.parentNode.parentNode.remove();
-			app.idbPromise.then((db) => {
-				const tx = db.transaction('conversions', 'readwrite');
-				tx.objectStore('conversions').delete(id);
-				return tx.complete;
-			});
-		});
-	}
 
 	/******************************
 	 * 	UI maintainers controle
@@ -106,6 +90,36 @@
 		app.selectToElem.
 		innerHTML += `<option value="${id}" ${slctd2}>${id}</option>`;
 	}
+
+
+	/******************************
+	 * 			OFFLINE Message
+	******************************/
+	app.showMessage = () => {
+		let headsUpElem  = document.querySelector('.headsUp');
+		if(headsUpElem) return;
+		headsUpElem = document.createElement('div');
+		headsUpElem.classList.add('headsUp');
+		headsUpElem.classList.add('clearfix');
+		const message =
+			'You seem to be offline. if you have any saved conversions make sure to use those.';
+		headsUpElem.innerHTML +=  `<span class="message">${message}</span>
+																<span class="hide">Hide</span>`;
+		headsUpElem.querySelector('.hide').addEventListener('click', function(){
+			headsUpElem.remove();
+			app.showMessage = false;
+		});
+		app.container.appendChild(headsUpElem);
+		app.showMessage = true;
+	}
+
+	app.hideMessage = () => {
+		let headsUpElem  = document.querySelector('.headsUp');
+		if(!headsUpElem) return;
+		headsUpElem.remove(); 
+	}
+
+
 
 	/******************************
 	 * 		network data getters
@@ -220,9 +234,23 @@
     });
   }
 
-	/************************************/
-	/* EVENT LISTENERS ON CONVERT CARD */
-	/***********************************/
+	/******************************
+	 * 				Events
+	******************************/
+	/* Adds close/delete event to the conversion card */
+	app.addCloseEvent = (card, id) => {
+		if(!card){
+			card = document;
+		}
+		card.querySelector('.close').addEventListener('click', function(){
+			this.parentNode.parentNode.remove();
+			app.idbPromise.then((db) => {
+				const tx = db.transaction('conversions', 'readwrite');
+				tx.objectStore('conversions').delete(id);
+				return tx.complete;
+			});
+		});
+	}
 
 	/* add new conversion */
 	document.querySelector('.button.convert').addEventListener('click', function(){
@@ -309,7 +337,19 @@
  }
 
    window.onload = (function(){
+		 
 		app._registerServiceWorker();
+
+		/* interval to check if user has internet access */
+		(function(){
+			setInterval(function(){
+				if(!navigator.onLine && app.showMessage){
+					app.showMessage();
+					return;
+				}
+				app.hideMessage();
+			}, 5000);
+		})();
 	})();
 })();
 
