@@ -7,7 +7,8 @@
 		selectToElem: document.querySelector('.toCurrency select'),
 		visibleCards: {},
 		addedConversions: [],
-		messageShown: true
+		messageShown: true,
+		isOnline: true
   }
 
 
@@ -78,6 +79,8 @@
 			// adding and saving new conversion
 			app.addedConversions.push({id: `${fr}_${to}`, fr, to, amount});
 			app.saveAddedConversions();
+		}).catch(() => {
+			app.isOnline = false;
 		});
 	}
 
@@ -102,7 +105,7 @@
 		headsUpElem.classList.add('headsUp');
 		headsUpElem.classList.add('clearfix');
 		const message =
-			'You seem to be offline. if you have any saved conversions make sure to use those.';
+			'You seem to be offline. If you have any saved conversions make sure to use them.';
 		headsUpElem.innerHTML +=  `<span class="message">${message}</span>
 																<span class="hide">Hide</span>`;
 		headsUpElem.querySelector('.hide').addEventListener('click', function(){
@@ -273,6 +276,8 @@
 				app.setCardElems(card, structuredData, amount);
 				app.addedConversions.push({id: `${fr}_${to}`, fr, to, amount});
 				app.saveAddedConversions();
+			}).catch(() => {
+				app.isOnline = false;
 			});
 		});
 	}
@@ -334,7 +339,7 @@
 		/* interval to check if user has internet access */
 		(function(){
 			setInterval(function(){
-				if(!navigator.onLine && app.messageShown){
+				if(!app.isOnline && app.messageShown){
 					app.showMessage();
 				}
 			}, 5000);
