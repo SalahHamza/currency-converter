@@ -9,18 +9,18 @@ self.addEventListener('install', (e) => {
 	e.waitUntil(
 		caches.open(staticCacheName).then( (cache) => {
 			return cache.addAll([
-				'/',
-				'/index.html',
-				'/assets/scripts/app.js',
-				'/assets/styles/style.css',
-				'/assets/styles/imgs/caret-down.png',
-				'/assets/images/money.png',
-				'/assets/icons/icons.css',
-				'/assets/icons/fonts/icons.eot',
-				'/assets/icons/fonts/icons.svg',
-				'/assets/icons/fonts/icons.ttf',
-				'/assets/icons/fonts/icons.woff',
-				'/vendors/scripts/idb.min.js',
+				'./',
+				'./index.html',
+				'./assets/scripts/app.js',
+				'./assets/styles/style.css',
+				'./assets/styles/imgs/caret-down.png',
+				'./assets/images/money.png',
+				'./assets/icons/icons.css',
+				'./assets/icons/fonts/icons.eot',
+				'./assets/icons/fonts/icons.svg',
+				'./assets/icons/fonts/icons.ttf',
+				'./assets/icons/fonts/icons.woff',
+				'./vendors/scripts/idb.min.js',
 				'https://free.currencyconverterapi.com/api/v5/currencies?'
 			]);
 		})
