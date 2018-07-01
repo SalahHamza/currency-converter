@@ -129,7 +129,7 @@
 		const query = `${fr}_${to},${to}_${fr}`;
 		const url   = `https://free.currencyconverterapi.com/api/v5/convert?q=${query}`;
 		const path = '/assets/scripts/countries.json';
-			return fetch(url).then(res => {
+		return fetch(url).then(res => {
 			if(!res || res.status !== 200) throw new Error('No network response');
 			return res.json();
 		});
@@ -353,8 +353,5 @@
 	})();
 })();
 
-/* #2e2e6e */
-/* #013f73 */
-/* #a70d0d */
 
 
