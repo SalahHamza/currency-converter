@@ -7,7 +7,7 @@
 		selectToElem: document.querySelector('.toCurrency select'),
 		visibleCards: {},
 		addedConversions: [],
-		showMessage: false
+		messageShown: true
   }
 
 
@@ -107,10 +107,9 @@
 																<span class="hide">Hide</span>`;
 		headsUpElem.querySelector('.hide').addEventListener('click', function(){
 			headsUpElem.remove();
-			app.showMessage = false;
+			app.messageShown = false;
 		});
 		app.container.appendChild(headsUpElem);
-		app.showMessage = true;
 	}
 
 	app.hideMessage = () => {
@@ -343,7 +342,7 @@
 		/* interval to check if user has internet access */
 		(function(){
 			setInterval(function(){
-				if(!navigator.onLine && app.showMessage){
+				if(!navigator.onLine && app.messageShown){
 					app.showMessage();
 					return;
 				}
