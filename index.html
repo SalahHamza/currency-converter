@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="/assets/icons/icons.css">
+	<link rel="stylesheet" href="/assets/styles/style.css">
+   <title>Currency Converter</title>
+</head>
+<body>
+   <header class="headbar">
+		<img src="/assets/images/money.png" alt="CC">
+      <h1>Currency Converter</h1>
+   </header>
+   <main class="main">
+      <div class="converter grid card">
+			<input class="amount" name="amount" type="number" value="1" min="1">
+			<div class="fromCurrency">
+				<label>From</label>
+				<select name="fromCurrency"></select>
+			</div>
+			<button class="exchange button">
+				<span class="icon-exchange"></span>
+			</button>
+			<div class="toCurrency">
+				<label>To</label>
+				<select name="toCurrency"></select>
+			</div>
+			<button class="convert button" type="button">convert</button>
+		</div>
+		<div class="conversion card cardTemplate">
+			<!-- Results -->
+			<div class="fromResult">
+				<input type="number" min="0" value="300.00" class="fromResultAmount" />
+				<button type="button" class="button fromResultName">USD</button>
+			</div>
+			<div class="toResult">
+				<span class="toResultAmount">400.324</span>
+				<span class="toResultName">EUR</span>
+			</div>
+			<!-- Rates -->
+			<div class="rates">
+				<div class="fromRate">1 USD = 0.894123 EUR</div>
+				<div class="toRate">1 EUR = 1.124631 USD</div>
+			</div>
+			<!-- Date -->
+			<div class="date">Thu, 28 Jun 2018 10:00 PM CDT</div>
+			<!-- utils -->
+			<div class="utils">
+				<!-- <span class="icon-refresh refresh"></span> -->
+				<span class="icon-trashcan close"></span>
+			</div>
+		</div>
+   </main>
+   <!-- Scripts -->
+	<script src="./vendors/scripts/uuid.min.js"></script>
+	<script src="./vendors/scripts/idb.min.js"></script>
+   <script src="/assets/scripts/app.js"></script>
+</body>
+</html>

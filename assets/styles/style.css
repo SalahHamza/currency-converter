@@ -1,0 +1,330 @@
+/* 1st		#44d9e6 */
+/* 2nd 		rgb(44, 44, 150)*/
+/* 3rd		#2e2e6e; */
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+
+body {
+	background-color: #ececec;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	align-content: stretch;
+	font-family: Helvetica, Verdana, sans-serif;
+	color: #666;
+}
+button { 
+	border: none; 
+	cursor: pointer;
+}
+input, 
+button,
+select {
+	text-transform: uppercase;
+	outline: none;
+}
+
+
+.headbar {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	background-color: #2e2e6e;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	box-sizing: border-box;
+	box-shadow: 0 2px 4px rgba(0,0,0,.3);
+	z-index: 1;
+	padding: 0 24px;
+	color: white;
+}
+
+@media screen and (min-width: 787px){
+	.headbar { padding: 0 48px; }
+}
+
+.headbar img {
+	height: 40px;
+}
+
+.headbar h1 {
+	font-weight: 400;
+	font-size: 20px;
+	margin-left: 10px;
+}
+
+.headbar .icon-money {
+	font-size: 30px;
+}
+
+
+.main {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding-top: 60px;
+}
+
+
+/******************************************
+				Card
+*******************************************/
+.card {
+	box-shadow: 0 0 1px 1px rgba(0,0,0,.3);
+	background-color: #fff;
+	padding: 24px 32px;
+	width: 568px;
+	box-sizing: border-box;
+	margin: 0 auto 16px auto;
+	position: relative;
+}
+
+@media screen and (max-width: 600px){
+	.card { 
+		margin: 0 2% 16px 2%;
+		max-width: 96%;
+	}
+}
+
+@media screen and (max-width: 480px){
+	.card {
+		padding: 16px; }
+}
+
+
+
+
+/******************************************
+						GRID
+*******************************************/
+.grid { display: grid; }
+
+.converter.grid {
+	grid-template-columns: 3fr 1fr 3fr;
+	grid-auto-rows: 1fr 1fr 1.2fr;
+	grid-template-areas:
+		"amount amount amount"
+		"c-from  exchange	 c-to"
+		"convert  convert  convert";
+	grid-row-gap: 16px;
+	grid-column-gap: 10px;
+}
+
+@media screen and (max-width: 480px){
+	.converter.grid {
+		grid-row-gap: 8px;
+		grid-column-gap: 0;
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"amount" "c-from" 
+			"exchange" "c-to" 
+			"convert";
+	}
+}
+
+
+/******************************************
+				Convert card items
+*******************************************/
+.converter .amount,
+.converter .fromCurrency,
+.converter .toCurrency,
+.converter .convert.button,
+.converter .exchange.button {
+	box-sizing: border-box;
+}
+
+.converter .amount {
+	grid-area: amount;
+	border: 1px solid #ccc;
+	padding: 8px 16px;
+	border-radius: 2px;
+}
+
+.converter .exchange {
+	grid-area: exchange;
+	font-size: 1.25em;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.converter .exchange img{
+	height: 24px;
+}
+
+
+.converter .fromCurrency {
+	grid-area: c-from;
+}
+
+.converter .toCurrency {
+	grid-area: c-to; 
+}
+
+.converter .fromCurrency,
+.converter .toCurrency {
+	display: flex;
+	flex-direction: row;
+}
+
+
+.converter .fromCurrency label,
+.converter .toCurrency label{
+	line-height: 2;
+	text-align: center;
+	min-width: 50px;
+	display: block;
+	background-color: #2e2e6e;
+	color: white;
+	border-radius: 2px 0 0 2px;
+}
+
+.converter .toCurrency select,
+.converter .fromCurrency select {
+	flex-grow: 1;
+	padding: 8px 16px;
+	background: url(/assets/images/caret-down.png) 
+							96% / 15% no-repeat;
+	background-size: 12px;
+  -webkit-appearance: none;
+	-moz-appearance: none;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+}
+
+.converter .convert.button {
+	grid-area: convert;
+}
+
+.button {
+	background-color: #2e2e6e;
+	border: 2px solid #2e2e6e;
+	color: #fff;
+	border-radius: 2px;
+}
+
+.button:hover {
+	box-shadow: 0 0 1px 1px rgba(0,0,0,.125);
+}
+
+
+/******************************************
+				Conversion card
+*******************************************/
+
+.close.button {
+	position: absolute;
+	left: 95%;
+	top: -6px;
+	border: none;
+	font-weight: 500;
+	box-sizing: border-box;
+	padding: 5px 8px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 600px){
+	.closeButton {
+		padding: 3px 6px;
+		left: 10%;
+		top: -6px; }
+}
+.cardTemplate {
+	display: none;
+}
+
+.conversion {
+	text-transform: uppercase;
+	padding-bottom: 10px;
+}
+
+
+
+/******************************************
+				Conversion card items
+*******************************************/
+.conversion .fromResult {
+	height: 40px;
+	display: flex;
+	justify-content: center;
+}
+
+.conversion .fromResult .button {
+	height: 100%;
+	border-radius: 0 2px 2px 0;
+}
+
+.conversion .fromResult .fromResultAmount {
+	padding: 8px;
+	box-sizing: border-box;
+	padding-left: 20px;
+	border-radius: 2px 0 0 2px;
+	border: 1px solid #ccc;
+	color: #555;
+	font-size: 1.015em;
+	background-color: #ececec;
+	transition: background-color .6s, color 0.6s;
+}
+.conversion .fromResult .fromResultAmount:focus {
+	background-color: white;
+	color: #222;
+}
+
+
+.conversion .toResult {
+	font-size: 1.75em;
+	text-align: center;
+	color: #2e2e6e;
+	margin: 20px 0 10px 0 ;
+}
+
+.conversion .rates {
+	text-align: center;
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+
+
+.conversion .date {
+	margin-top: 15px;
+	text-align: center;
+	color: #2e2e6e;
+}
+
+.conversion .utils {
+	float: right;
+	font-size: 1.55em;
+	margin-top: 15px;
+	position: relative;
+	
+}
+
+.close {
+	margin-left: 10px;
+}
+
+.conversion .utils .close,
+.conversion .utils .refresh {
+	transition: background-color .6s, color 0.6s;
+}
+
+.conversion .utils .close:hover {
+	color: tomato;
+}
+
+.conversion .utils .refresh:hover {
+	color: lightgreen;
+}
