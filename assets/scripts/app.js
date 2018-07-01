@@ -112,14 +112,6 @@
 		app.container.appendChild(headsUpElem);
 	}
 
-	app.hideMessage = () => {
-		let headsUpElem  = document.querySelector('.headsUp');
-		if(!headsUpElem) return;
-		headsUpElem.remove(); 
-	}
-
-
-
 	/******************************
 	 * 		network data getters
 	******************************/
@@ -344,9 +336,7 @@
 			setInterval(function(){
 				if(!navigator.onLine && app.messageShown){
 					app.showMessage();
-					return;
 				}
-				app.hideMessage();
 			}, 5000);
 		})();
 	})();
