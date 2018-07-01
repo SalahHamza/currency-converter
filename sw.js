@@ -20,7 +20,8 @@ self.addEventListener('install', (e) => {
 				'/assets/icons/fonts/icons.svg',
 				'/assets/icons/fonts/icons.ttf',
 				'/assets/icons/fonts/icons.woff',
-				'/vendors/scripts/idb.min.js'
+				'/vendors/scripts/idb.min.js',
+				'https://free.currencyconverterapi.com/api/v5/currencies?'
 			]);
 		})
 	);
@@ -49,7 +50,7 @@ self.addEventListener('activate', function(e) {
 
 
 self.addEventListener('fetch', function(e) {
-  var dataUrl = 'http://free.currencyconverterapi.com/api/v5/';
+  var dataUrl = 'https://free.currencyconverterapi.com/api/v5/';
   if (e.request.url.includes(dataUrl)) {
     e.respondWith(
 			fetch(e.request).then( (res) => {

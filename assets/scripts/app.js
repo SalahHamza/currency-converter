@@ -87,7 +87,7 @@
 	/* get conversion data and updates card conversion  */
   app.getConversionData = (fr, to, amount) => {
     const query = `${fr}_${to},${to}_${fr}`;
-		const url   = `http://free.currencyconverterapi.com/api/v5/convert?q=${query}`;
+		const url   = `https://free.currencyconverterapi.com/api/v5/convert?q=${query}`;
 		const path = '/assets/scripts/countries.json';
     return fetch(url).then(res => {
 			if(!res || res.status !== 200) throw new Error('No network response');
@@ -111,7 +111,7 @@
 	
 	/* fetchs currencies from API and sets it to the DB */
 	app.fetchCurrencyData = (db) => {
-		const url = 'http://free.currencyconverterapi.com/api/v5/currencies?';
+		const url = 'https://free.currencyconverterapi.com/api/v5/currencies?';
 		fetch(url).then(res => {
 			if(!res || res.status !== 200){
 				return Promise.resolve();
